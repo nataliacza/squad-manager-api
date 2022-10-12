@@ -1,0 +1,45 @@
+version: "3.8"
+
+services:
+  app:
+    container_name: squad_manager_api
+    image: backend_api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    restart: always
+    depends_on:
+      - database
+    networks:
+      - backend_network
+
+  database:
+    container_name: postgres_container
+    image: postgres:12
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
+    restart: always
+    networks:
+      - backend_network
+
+  pg_admin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    env_file:
+      - .env
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    restart: always
+    networks:
+      - backend_network
+
+networks:
+  backend_network:
+    name: backend_network
+    driver: bridge
