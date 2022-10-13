@@ -66,7 +66,7 @@ async def get_member_by_id(id: int):
         if get_member:
             return get_member
 
-        return JSONResponse(status_code=404, content={"detail": f"Id Not Found"})
+        return JSONResponse(status_code=404, content={"detail": "Id Not Found"})
 
 
 @members_router.get(path="/{id}/details",
@@ -85,4 +85,24 @@ async def get_member_details(id: int):
         if get_member:
             return get_member
 
-        return JSONResponse(status_code=404, content={"detail": f"Id Not Found"})
+        return JSONResponse(status_code=404, content={"detail": "Id Not Found"})
+
+
+@members_router.delete(path="/{id}",
+                       summary="Delete member",
+                       status_code=204,
+                       responses={204: {"detail": "No content"},
+                                  401: {"detail": "Unauthorized"},
+                                  404: {"detail": "Not Found"},
+                                  405: {"detail": "Method Not Allowed"}})
+async def delete_member(id: int):
+
+    with Session(engine) as session:
+        get_member = session.get(Member, id)
+
+        if get_member:
+            session.delete(get_member)
+            session.commit()
+            return {}
+
+        return JSONResponse(status_code=404, content={"detail": "Id Not Found"})
