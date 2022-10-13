@@ -1,4 +1,3 @@
-import uuid
 from datetime import datetime
 from typing import Optional
 
@@ -13,19 +12,23 @@ from app.models.enums import Function, Institution, Course
 
 
 class Member(SQLModel, table=True):
-    id: int = Field(primary_key=True, index=True, nullable=False)
-    first_name: str = Field(nullable=False)
-    last_name: str = Field(nullable=False)
-    mobile: str = Field(nullable=False)
-    email: EmailStr = Field(nullable=False)
-    function: Optional[Function] = Field(nullable=True)
-    institution: Optional[Institution] = Field(nullable=True)
+    __tablename__ = "members"
+
+    id: Optional[int] = Field(primary_key=True, index=True)
+    first_name: str
+    last_name: str
+    mobile: str
+    email: EmailStr
+    function: Optional[Function] = Field(default=None, nullable=True)
+    institution: Optional[Institution] = Field(default=None, nullable=True)
     is_active: bool = Field(default=True, nullable=False)
 
 
-class MemberCourse(SQLModel, table=True):
-    id: int = Field(primary_key=True, index=True, nullable=False)
-    member_id: int = Field(foreign_key="member.id", nullable=False)
-    course: Course = Field(nullable=False)
-    date: datetime = Field(nullable=False)
-    expires: datetime = Field(nullable=False)
+class Training(SQLModel, table=True):
+    __tablename__ = "trainings"
+
+    id: Optional[int] = Field(primary_key=True, index=True)
+    member_id: int = Field(foreign_key="members.id")
+    course_name: Course
+    date: datetime
+    expires: datetime

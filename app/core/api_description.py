@@ -6,15 +6,15 @@ PROJECT_VERSION = "1.0.0"
 
 API_TAGS = [
     {
-        "name": "members",
+        "name": "Members",
         "description": "Members endpoints",
     },
     {
-        "name": "dogs",
+        "name": "Dogs",
         "description": "Dogs endpoints",
     },
     {
-        "name": "exams",
+        "name": "Exams",
         "description": "Exams endpoints",
     },
 ]
