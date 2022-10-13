@@ -13,13 +13,27 @@ class MemberDto(BaseModel):
     email: EmailStr
 
 
-class MemberDetailsDto(MemberDto):
-    function: Optional[Function] = None
-    institution: Optional[Institution] = None
-
-
-class MemberCreateDto(BaseModel):
+class MemberDetailsDto(BaseModel):
+    id: int
     first_name: str
     last_name: str
     mobile: str
     email: EmailStr
+    function: Optional[Function] = None
+    institution: Optional[Institution] = None
+
+
+class CreateMemberDto(BaseModel):
+    first_name: str
+    last_name: str
+    mobile: str
+    email: EmailStr
+
+
+class UpdateMemberDetailsDto(BaseModel):
+    first_name: str
+    last_name: str
+    mobile: str
+    email: EmailStr
+    function: Optional[Function] = None
+    institution: Optional[Institution] = None
