@@ -1,14 +1,13 @@
 from typing import Optional
 
-from sqlmodel import SQLModel, Field
+from pydantic import BaseModel
+from sqlmodel import Field
 
 from app.models.enums import Gender
 
 
-class Dog(SQLModel, table=True):
-    __tablename__ = "dogs"
-
-    id: Optional[int] = Field(primary_key=True, index=True)
+class DogDto(BaseModel):
+    id: int
     name: str
     breed: Optional[str] = None
     gender: Optional[Gender] = None
@@ -17,5 +16,6 @@ class Dog(SQLModel, table=True):
     owner_id: int = Field(foreign_key="members.id")
 
 
-# class DogsExams(SQLModel, table=True):
-#     pass
+class CreateDogDto(BaseModel):
+    name: str
+    owner_id: int = Field(foreign_key="members.id")

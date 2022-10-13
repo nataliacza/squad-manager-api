@@ -24,6 +24,7 @@ class Member(SQLModel, table=True):
     is_active: bool = Field(default=True, nullable=False)
 
 
+# TODO: rename Trainings to Properties?
 class Training(SQLModel, table=True):
     __tablename__ = "trainings"
 
