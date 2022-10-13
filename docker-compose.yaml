@@ -19,18 +19,20 @@ services:
       - backend_network
 
   database:
-    container_name: postgres_container
+    container_name: postgres_ctr
     image: postgres:12
     env_file:
       - .env
     ports:
-      - "54322:5432"
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
     restart: always
     networks:
       - backend_network
 
   pg_admin:
-    container_name: pgadmin_container
+    container_name: pgadmin_ctr
     image: dpage/pgadmin4
     env_file:
       - .env
@@ -44,3 +46,6 @@ networks:
   backend_network:
     name: backend_network
     driver: bridge
+
+volumes:
+  postgres_data:
