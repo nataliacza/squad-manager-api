@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class Function(str, Enum):
+class FunctionEnum(str, Enum):
     Prezes = "Prezes"
     Naczelnik = "Naczelnik"
     Zca_Naczelnika = "Zca_Naczelnika"
@@ -17,12 +17,12 @@ class Function(str, Enum):
     Stazysta = "Stażysta"
 
 
-class Institution(str, Enum):
+class InstitutionEnum(str, Enum):
     OSP = "OSP"
     PSP = "PSP"
 
 
-class Course(str, Enum):
+class CourseEnum(str, Enum):
     Kpp = "Kpp"
     Badania = "Badania"
     Kurs_podstawowy = "Kurs podstawowy"
@@ -34,13 +34,13 @@ class Course(str, Enum):
     Kurs_smiglowcowy = "Kurs Śmigłowcowy"
 
 
-class Exam(str, Enum):
+class ExamEnum(str, Enum):
     Teren_0 = "Teren 0"
     Teren_1 = "Teren 1"
     Gruzy_0 = "Gruzy 0"
     Gruzy_1 = "Gruzy 1"
 
 
-class Gender(str, Enum):
+class GenderEnum(str, Enum):
     Pies = "Pies"
     Suka = "Suka"

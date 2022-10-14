@@ -2,8 +2,8 @@ from fastapi import FastAPI
 
 from app.config import settings
 from app.core.database import create_db_and_tables
-from app.routers.dogs_api import dogs_router
-from app.routers.members_api import members_router
+from app.endpoints.dogs_api import dogs_router
+from app.endpoints.members_api import members_router
 
 
 def get_application():
