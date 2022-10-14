@@ -1,8 +1,9 @@
+from datetime import datetime
 from typing import Optional
 
 from pydantic import BaseModel, EmailStr
 
-from app.models.enums import FunctionEnum, InstitutionEnum
+from app.models.enums import FunctionEnum, InstitutionEnum, CourseEnum
 
 
 class MemberDto(BaseModel):
@@ -37,3 +38,18 @@ class UpdateMemberDetailsDto(BaseModel):
     email: EmailStr
     function: Optional[FunctionEnum] = None
     institution: Optional[InstitutionEnum] = None
+
+
+class CourseDto(BaseModel):
+    id: int
+    member_id: int
+    course_name: CourseEnum
+    date: datetime
+    expires: datetime
+
+
+class CreateCourseDto(BaseModel):
+    member_id: int
+    course_name: CourseEnum
+    date: datetime
+    expires: datetime

@@ -6,8 +6,9 @@ from sqlmodel import Session, select
 from starlette.responses import JSONResponse
 
 from app.core.database import engine
-from app.models.members import Member
-from app.schemas.members import MemberDto, MemberDetailsDto, CreateMemberDto, UpdateMemberDetailsDto
+from app.models.members import Member, Course
+from app.schemas.members import MemberDto, MemberDetailsDto, CreateMemberDto, UpdateMemberDetailsDto, CourseDto, \
+    CreateCourseDto
 
 members_router = APIRouter(prefix="/members",
                            tags=["Members"])
@@ -137,3 +138,44 @@ async def update_member_details(id: int, update_member: UpdateMemberDetailsDto):
                 return error
 
         return JSONResponse(status_code=404, content={"detail": "Id Not Found"})
+
+
+@members_router.post(path="/{id}/courses",
+                     response_model=CourseDto,
+                     summary="Add new course to member",
+                     status_code=201,
+                     responses={201: {"detail": "Created"},
+                                400: {"detail": "Bad Request"},
+                                401: {"detail": "Unauthorized"},
+                                404: {"detail": "Not Found"},
+                                405: {"detail": "Method Not Allowed"}})
+async def add_member_course(id: int, course_details: CreateCourseDto):
+
+    with Session(engine) as session:
+        get_member = session.get(Member, id)
+
+        if get_member:
+            try:
+                new_course = Course(**course_details.dict())
+                session.add(new_course)
+                session.commit()
+                session.refresh(new_course)
+                return new_course
+
+            except ValidationError as error:
+                return error
+
+        return JSONResponse(status_code=404, content={"detail": "Id Not Found"})
+
+
+@members_router.get(path="/{id}/courses",
+                    response_model=List[CourseDto],
+                    summary="Get all member courses",
+                    status_code=200,
+                    responses={200: {"detail": "Successful operation"},
+                               400: {"detail": "Bad Request"},
+                               401: {"detail": "Unauthorized"},
+                               404: {"detail": "Not Found"},
+                               405: {"detail": "Method Not Allowed"}})
+async def add_member_course(id: int):
+    pass
