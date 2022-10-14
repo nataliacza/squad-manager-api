@@ -7,6 +7,7 @@ from starlette.responses import JSONResponse
 
 from app.core.database import engine
 from app.models.dogs import Dog
+from app.models.members import Member
 from app.schemas.dogs import DogDto, CreateDogDto
 
 dogs_router = APIRouter(prefix="/dogs",
@@ -19,20 +20,25 @@ dogs_router = APIRouter(prefix="/dogs",
                   status_code=201,
                   responses={201: {"detail": "Created"},
                              401: {"detail": "Unauthorized"},
+                             404: {"detail": "Not Found"},
                              405: {"detail": "Method Not Allowed"}})
 async def add_dog(dog_details: CreateDogDto):
 
-    # TODO: cover if owner ID not exist
     with Session(engine) as session:
-        try:
-            new_dog = Dog(**dog_details.dict())
-            session.add(new_dog)
-            session.commit()
-            session.refresh(new_dog)
-            return new_dog
+        get_owner = session.get(Member, dog_details.owner_id)
 
-        except ValidationError as error:
-            return error
+        if get_owner:
+            try:
+                new_dog = Dog(**dog_details.dict())
+                session.add(new_dog)
+                session.commit()
+                session.refresh(new_dog)
+                return new_dog
+
+            except ValidationError as error:
+                return error
+
+        return JSONResponse(status_code=404, content={"detail": "Owner Id Not Found"})
 
 
 @dogs_router.get(path="/",
