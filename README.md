@@ -47,7 +47,8 @@ Commit messages:
 - fix - fixing a bug
 - refactor - changing code for performance or convenience purpose
 - test - test-related code
-- chore - everything else (writing documentation, formatting, cleaning useless code etc.)
+- chore - everything else (formatting, cleaning useless code etc.)
+- docs - creating or updating documents
 - ci - changes to  CI configuration files and scripts
 
 Examples:
