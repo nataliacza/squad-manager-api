@@ -30,7 +30,7 @@ class DogIdWithName(DogNameDto, DogIdDto):
     pass
 
 
-class CreateDogDto(DogOwnerDto, DogDetailsDto, DogNameDto):
+class SaveDogDto(DogOwnerDto, DogDetailsDto, DogNameDto):
     pass
 
 
