@@ -2,7 +2,7 @@ from app.core.database import engine
 from sqlmodel import Session
 
 from app.models.enums import CourseEnum
-from app.models.members import Course
+from app.models.core_models import Course
 
 
 def generate_courses(member_id: int):
