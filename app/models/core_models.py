@@ -4,6 +4,7 @@ from typing import Optional, List
 from pydantic import EmailStr
 from sqlmodel import SQLModel, Field, Relationship
 
+from app.models.dogs import Dog
 from app.models.enums import FunctionEnum, InstitutionEnum, CourseEnum
 
 
@@ -19,8 +20,8 @@ class Course(SQLModel, table=True):
     date: datetime = Field(default=None, nullable=True)
     expires: datetime = Field(default=None, nullable=True)
 
-    member_id: Optional[int] = Field(default=None, foreign_key="members.id")
-    member: Optional["Member"] = Relationship(back_populates="courses")
+    member_id: int = Field(foreign_key="members.id")
+    member: "Member" = Relationship(back_populates="courses")
 
 
 class Member(SQLModel, table=True):
@@ -35,3 +36,5 @@ class Member(SQLModel, table=True):
     institution: Optional[InstitutionEnum] = Field(default=None, nullable=True)
 
     courses: List[Course] = Relationship(back_populates="member")
+    # dogs: list[Dog] = Relationship(back_populates="owner")
+    dogs: list[Dog] = []
