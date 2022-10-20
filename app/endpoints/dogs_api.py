@@ -6,16 +6,15 @@ from sqlmodel import Session, select
 from starlette.responses import JSONResponse
 
 from app.core.database import engine
-from app.models.dogs import Dog
-from app.models.members import Member
-from app.schemas.dogs import DogDto, CreateDogDto
+from app.models.core_models import Member, Dog
+from app.schemas.dogs import CreateDogDto, DogDetailsReadDto
 
 dogs_router = APIRouter(prefix="/dogs",
                         tags=["Dogs"])
 
 
 @dogs_router.post(path="/",
-                  response_model=DogDto,
+                  response_model=DogDetailsReadDto,
                   summary="Add new dog",
                   status_code=201,
                   responses={201: {"detail": "Created"},
@@ -29,7 +28,7 @@ async def add_dog(dog_details: CreateDogDto):
 
         if get_owner:
             try:
-                new_dog = Dog(**dog_details.dict())
+                new_dog = Dog.from_orm(dog_details)
                 session.add(new_dog)
                 session.commit()
                 session.refresh(new_dog)
@@ -42,7 +41,7 @@ async def add_dog(dog_details: CreateDogDto):
 
 
 @dogs_router.get(path="/",
-                 response_model=List[DogDto],
+                 response_model=List[DogDetailsReadDto],
                  summary="Get all dogs",
                  status_code=200,
                  responses={200: {"detail": "Successful operation"},
@@ -56,7 +55,7 @@ async def get_all_dogs():
 
 
 @dogs_router.get(path="/{id}",
-                 response_model=DogDto,
+                 response_model=DogDetailsReadDto,
                  summary="Get dog by id",
                  status_code=200,
                  responses={200: {"detail": "Successful operation"},
