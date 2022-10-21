@@ -5,25 +5,30 @@
 Application would be available only for registered users, which are involved in team management (chief or manager).
 
 MVP features:
-- Member list with basic details - contact details and courses.
-- Member details - detailed information of the member, owned dogs, detailed information about courses taken. 
-- Dog list with basic information - name, owner, chip id, etc.
-- Dog details - detailed information with exams.
-- Exam list with basic information - basically who, what, when.
+- Member list with basic details.
+- Member details - detailed information of the member, owned dogs, about courses taken.
+- Dog list with details.
+- Exam list with details - who, what, when.
 - CRUD for all above.
 
 Next steps:
+- Add search and filter for exam list.
+- Add pagination for all list views.
 - Add authorization and authentication.
-- Equipment list with useful information.
-- Event and notification dashboard.
-- List of actions group participated in - when, where, who, etc.
+- Deploy.
+
+Future plan:
+- Add personal inventory for each member.
+- Add equipment list with details.
+- Event and notification dashboard (main page).
+- List of actions group participated in - when, where, who.
 - Training planner.
-- Alarm system used for search actions.
+
 
 ## Tech
 - Python 3
 - FastAPI
-- PostgreSQL
+- PostgreSQL / SQLAlchemy / SQLModel
 - Docker and docker-compose
 - Poetry
 
@@ -65,15 +70,6 @@ Examples:
 
 ...
 
-### Prerequisites
-
-...
-
-### Installation
-
-
 ## License
 
 ....
-
-
