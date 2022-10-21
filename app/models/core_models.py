@@ -1,14 +1,10 @@
-from datetime import datetime
+from datetime import date, datetime
 from typing import Optional, List
 
 from pydantic import EmailStr
 from sqlmodel import SQLModel, Field, Relationship
 
 from app.models.enums import FunctionEnum, InstitutionEnum, CourseEnum, GenderEnum, ExamEnum
-
-
-# def generate_uuid():
-#     return str(uuid.uuid4())
 
 
 class Member(SQLModel, table=True):
@@ -31,8 +27,8 @@ class Course(SQLModel, table=True):
 
     id: Optional[int] = Field(primary_key=True, index=True)
     course_name: CourseEnum
-    date: datetime = Field(default=None, nullable=True)
-    expires: datetime = Field(default=None, nullable=True)
+    date_from: date = Field(default=None, nullable=True)
+    expires: date = Field(default=None, nullable=True)
 
     member_id: int = Field(foreign_key="members.id")
     member: Member = Relationship(back_populates="courses", sa_relationship_kwargs={"lazy": "selectin"})

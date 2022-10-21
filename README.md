@@ -59,10 +59,10 @@ Commit messages:
 Examples:
 - feat: add new model
 - fix: update port number
-- refactor: rewrite get entpoint
+- refactor: rewrite get endpoint
 - tests: add unit tests
 - chore: write function documentation
-- feat(api)!: send an email to the customer when a product is shipped
+- feat(api)!: send email to the customer when a product is shipped
 - feat(lang): add Polish language
 
 

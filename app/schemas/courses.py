@@ -1,6 +1,7 @@
-from datetime import datetime
+from datetime import date
 from typing import Optional
 
+from pydantic import validator
 from sqlmodel import SQLModel
 
 from app.models.enums import CourseEnum
@@ -10,11 +11,25 @@ class CourseIdDto(SQLModel):
     id: int
 
 
-class CourseBaseDto(SQLModel):
+class CourseNameDto(SQLModel):
     course_name: CourseEnum
-    date: Optional[datetime] = None
-    expires: Optional[datetime] = None
 
 
-class CourseReadDto(CourseBaseDto, CourseIdDto):
+class CourseDetailsDto(SQLModel):
+    date_from: Optional[date] = None
+    expires: Optional[date] = None
+
+    @validator("date_from")
+    def future_date(cls, date_from):
+        today = date.today()
+        if date_from is not None and date_from > today:
+            assert False, "provide date from past"
+        return date_from
+
+
+class CourseReadDto(CourseDetailsDto, CourseNameDto, CourseIdDto):
+    pass
+
+
+class UpdateCourseDto(CourseDetailsDto):
     pass
