@@ -54,7 +54,7 @@ async def get_all_dogs():
         return dogs
 
 
-@dogs_router.get(path="/{id}",
+@dogs_router.get(path="/{dog_id}",
                  response_model=DogDetailsReadDto,
                  summary="Get dog by id",
                  status_code=200,
@@ -62,10 +62,10 @@ async def get_all_dogs():
                             401: {"detail": "Unauthorized"},
                             404: {"detail": "Not Found"},
                             405: {"detail": "Method Not Allowed"}})
-async def get_dog_by_id(id: int):
+async def get_dog_by_id(dog_id: int):
 
     with Session(engine) as session:
-        get_dog = session.get(Dog, id)
+        get_dog = session.get(Dog, dog_id)
 
         if get_dog:
             return get_dog
@@ -73,7 +73,7 @@ async def get_dog_by_id(id: int):
         return JSONResponse(status_code=404, content={"detail": "Id Not Found"})
 
 
-@dogs_router.put(path="/{id}",
+@dogs_router.put(path="/{dog_id}",
                  response_model=DogDetailsReadDto,
                  summary="Update dog details",
                  status_code=200,
@@ -81,10 +81,10 @@ async def get_dog_by_id(id: int):
                             401: {"detail": "Unauthorized"},
                             404: {"detail": "Not Found"},
                             405: {"detail": "Method Not Allowed"}})
-async def update_dog_details(id: int, update_dog: SaveDogDto):
+async def update_dog_details(dog_id: int, update_dog: SaveDogDto):
 
     with Session(engine) as session:
-        get_dog = session.get(Dog, id)
+        get_dog = session.get(Dog, dog_id)
 
         if get_dog:
             get_member = session.get(Member, update_dog.owner_id)

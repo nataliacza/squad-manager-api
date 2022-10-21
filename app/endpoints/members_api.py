@@ -56,7 +56,7 @@ async def get_all_members():
         return members
 
 
-@members_router.get(path="/{id}/details",
+@members_router.get(path="/{member_id}/details",
                     response_model=MemberDetailsReadDto,
                     summary="Get member by id",
                     status_code=200,
@@ -64,10 +64,10 @@ async def get_all_members():
                                401: {"detail": "Unauthorized"},
                                404: {"detail": "Not Found"},
                                405: {"detail": "Method Not Allowed"}})
-async def get_member_details(id: int):
+async def get_member_details(member_id: int):
 
     with Session(engine) as session:
-        get_member = session.get(Member, id)
+        get_member = session.get(Member, member_id)
 
         if get_member:
             return get_member
@@ -77,17 +77,17 @@ async def get_member_details(id: int):
 
 # TODO: validate if member has any dogs and exams assigned
 # TODO: on delete cascade for courses
-@members_router.delete(path="/{id}",
+@members_router.delete(path="/{member_id}",
                        summary="Delete member",
                        status_code=204,
                        responses={204: {"detail": "No content"},
                                   401: {"detail": "Unauthorized"},
                                   404: {"detail": "Not Found"},
                                   405: {"detail": "Method Not Allowed"}})
-async def delete_member(id: int):
+async def delete_member(member_id: int):
 
     with Session(engine) as session:
-        get_member = session.get(Member, id)
+        get_member = session.get(Member, member_id)
 
         if get_member:
             session.delete(get_member)
@@ -97,7 +97,7 @@ async def delete_member(id: int):
         return JSONResponse(status_code=404, content={"detail": "Id Not Found"})
 
 
-@members_router.put(path="/{id}",
+@members_router.put(path="/{member_id}",
                     response_model=UpdateMemberDetailsResponseDto,
                     summary="Update member details",
                     status_code=200,
@@ -105,10 +105,10 @@ async def delete_member(id: int):
                                401: {"detail": "Unauthorized"},
                                404: {"detail": "Not Found"},
                                405: {"detail": "Method Not Allowed"}})
-async def update_member_details(id: int, update_member: UpdateMemberDetailsDto):
+async def update_member_details(member_id: int, update_member: UpdateMemberDetailsDto):
 
     with Session(engine) as session:
-        get_member = session.get(Member, id)
+        get_member = session.get(Member, member_id)
 
         if get_member:
             try:
