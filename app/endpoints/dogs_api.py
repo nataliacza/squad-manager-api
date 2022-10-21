@@ -105,3 +105,25 @@ async def update_dog_details(id: int, update_dog: SaveDogDto):
             return JSONResponse(status_code=404, content={"detail": "Owner Id Not Found"})
 
         return JSONResponse(status_code=404, content={"detail": "Dog Id Not Found"})
+
+
+# TODO: when dog is deleted, all assigned exams will be deleted - cascade
+@dogs_router.delete(path="/{dog_id}",
+                    summary="Delete dog",
+                    description="On deletion, all assigned exams will be removed.",
+                    status_code=204,
+                    responses={204: {"detail": "No content"},
+                               401: {"detail": "Unauthorized"},
+                               404: {"detail": "Not Found"},
+                               405: {"detail": "Method Not Allowed"}})
+async def delete_dog(dog_id: int):
+
+    with Session(engine) as session:
+        get_dog = session.get(Dog, dog_id)
+
+        if get_dog:
+            session.delete(get_dog)
+            session.commit()
+            return {}
+
+        return JSONResponse(status_code=404, content={"detail": "Id Not Found"})
