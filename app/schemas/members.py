@@ -4,7 +4,7 @@ from pydantic import EmailStr
 from sqlmodel import SQLModel
 
 from app.models.enums import FunctionEnum, InstitutionEnum
-from app.schemas.courses import CourseReadDto, CourseBaseDto
+from app.schemas.courses import CourseReadDto
 from app.schemas.dogs import DogIdWithName
 
 
@@ -44,15 +44,11 @@ class CreateMemberDto(MemberBaseDto):
     pass
 
 
-class CreateMemberResponseDto(MemberDetailsDto, MemberBaseDto, MemberIdDto):
+class MemberResponseDto(MemberDetailsDto, MemberBaseDto, MemberIdDto):
     pass
 
 
 class UpdateMemberDetailsDto(MemberDetailsDto, MemberBaseDto):
-    pass
-
-
-class UpdateMemberDetailsResponseDto(MemberDetailsDto, MemberBaseDto, MemberIdDto):
     pass
 
 
