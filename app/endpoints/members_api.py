@@ -159,3 +159,23 @@ async def update_course_details(*, member_id: int, course_id: int, update_course
             return JSONResponse(status_code=404, content={"detail": "Course Id Not Found"})
 
         return JSONResponse(status_code=404, content={"detail": "Member Id Not Found"})
+
+
+@members_router.get(path="/{member_id}/courses",
+                    response_model=List[CourseReadDto],
+                    summary="Get member course list",
+                    status_code=200,
+                    responses={200: {"detail": "Successful operation"},
+                               401: {"detail": "Unauthorized"},
+                               404: {"detail": "Not Found"},
+                               405: {"detail": "Method Not Allowed"}})
+async def get_member_courses(member_id: int):
+
+    with Session(engine) as session:
+        get_member = session.get(Member, member_id)
+
+        if get_member:
+            courses = session.exec(select(Course).where(Course.member_id == member_id)).all()
+            return courses
+
+        return JSONResponse(status_code=404, content={"detail": "Id Not Found"})
