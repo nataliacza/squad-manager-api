@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date
 from typing import Optional, List
 
 from pydantic import EmailStr
@@ -42,7 +42,7 @@ class Dog(SQLModel, table=True):
     breed: Optional[str] = None
     breeder: Optional[str] = None
     gender: Optional[GenderEnum] = None
-    dob: Optional[datetime] = None
+    dob: Optional[date] = None
     chip: Optional[str] = None
 
     owner_id: int = Field(foreign_key="members.id")
@@ -56,5 +56,5 @@ class Exam(SQLModel, table=True):
     type: ExamEnum
     member_id: int = Field(foreign_key="members.id")
     dog_id: int = Field(foreign_key="dogs.id")
-    date: datetime
-    expires: datetime
+    date_from: date
+    expires: date
