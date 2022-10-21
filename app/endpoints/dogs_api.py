@@ -7,7 +7,7 @@ from starlette.responses import JSONResponse
 
 from app.core.database import engine
 from app.models.core_models import Member, Dog
-from app.schemas.dogs import CreateDogDto, DogDetailsReadDto
+from app.schemas.dogs import SaveDogDto, DogDetailsReadDto
 
 dogs_router = APIRouter(prefix="/dogs",
                         tags=["Dogs"])
@@ -21,7 +21,7 @@ dogs_router = APIRouter(prefix="/dogs",
                              401: {"detail": "Unauthorized"},
                              404: {"detail": "Not Found"},
                              405: {"detail": "Method Not Allowed"}})
-async def add_dog(dog_details: CreateDogDto):
+async def add_dog(dog_details: SaveDogDto):
 
     with Session(engine) as session:
         get_owner = session.get(Member, dog_details.owner_id)
@@ -69,5 +69,61 @@ async def get_dog_by_id(id: int):
 
         if get_dog:
             return get_dog
+
+        return JSONResponse(status_code=404, content={"detail": "Id Not Found"})
+
+
+@dogs_router.put(path="/{id}",
+                 response_model=DogDetailsReadDto,
+                 summary="Update dog details",
+                 status_code=200,
+                 responses={200: {"detail": "Successful operation"},
+                            401: {"detail": "Unauthorized"},
+                            404: {"detail": "Not Found"},
+                            405: {"detail": "Method Not Allowed"}})
+async def update_dog_details(id: int, update_dog: SaveDogDto):
+
+    with Session(engine) as session:
+        get_dog = session.get(Dog, id)
+
+        if get_dog:
+            get_member = session.get(Member, update_dog.owner_id)
+            if get_member:
+                try:
+                    new_data = update_dog.dict()
+                    for key, value in new_data.items():
+                        setattr(get_dog, key, value)
+                    session.add(get_dog)
+                    session.commit()
+                    session.refresh(get_dog)
+
+                    return get_dog
+
+                except ValidationError as error:
+                    return error
+
+            return JSONResponse(status_code=404, content={"detail": "Owner Id Not Found"})
+
+        return JSONResponse(status_code=404, content={"detail": "Dog Id Not Found"})
+
+
+# TODO: when dog is deleted, all assigned exams will be deleted - cascade
+@dogs_router.delete(path="/{dog_id}",
+                    summary="Delete dog",
+                    description="On deletion, all assigned exams will be removed.",
+                    status_code=204,
+                    responses={204: {"detail": "No content"},
+                               401: {"detail": "Unauthorized"},
+                               404: {"detail": "Not Found"},
+                               405: {"detail": "Method Not Allowed"}})
+async def delete_dog(dog_id: int):
+
+    with Session(engine) as session:
+        get_dog = session.get(Dog, dog_id)
+
+        if get_dog:
+            session.delete(get_dog)
+            session.commit()
+            return {}
 
         return JSONResponse(status_code=404, content={"detail": "Id Not Found"})

@@ -26,23 +26,16 @@ class DogOwnerDto(SQLModel):
     owner_id: int
 
 
-# class DogOwnerNameDto(SQLModel):
-#     owner_first_name: str
-#     owner_last_name: str
-
-
 class DogIdWithName(DogNameDto, DogIdDto):
     pass
 
 
-class CreateDogDto(SQLModel):
-    name: str
-    owner_id: int
+class SaveDogDto(DogOwnerDto, DogDetailsDto, DogNameDto):
+    pass
 
 
 class DogDetailsReadDto(DogOwnerDto, DogDetailsDto, DogNameDto, DogIdDto):
     pass
-    # add owner first + last name??
 
 
 
