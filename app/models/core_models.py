@@ -18,7 +18,9 @@ class Member(SQLModel, table=True):
     function: Optional[FunctionEnum] = Field(default=None, nullable=True)
     institution: Optional[InstitutionEnum] = Field(default=None, nullable=True)
 
-    courses: List["Course"] = Relationship(back_populates="member", sa_relationship_kwargs={"lazy": "selectin"})
+    courses: List["Course"] = Relationship(back_populates="member",
+                                           sa_relationship_kwargs={"lazy": "selectin",
+                                                                   "cascade": "all, delete , delete-orphan"})
     dogs: List["Dog"] = Relationship(back_populates="owner", sa_relationship_kwargs={"lazy": "selectin"})
 
 
@@ -54,7 +56,7 @@ class Exam(SQLModel, table=True):
 
     id: Optional[int] = Field(primary_key=True, index=True)
     type: ExamEnum
-    member_id: int = Field(foreign_key="members.id")
-    dog_id: int = Field(foreign_key="dogs.id")
+    member_id: Optional[int] = Field(foreign_key="members.id", default=None)
+    dog_id: Optional[int] = Field(foreign_key="dogs.id", default=None)
     date_from: date
     expires: date
