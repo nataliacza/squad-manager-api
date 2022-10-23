@@ -22,6 +22,9 @@ class Member(SQLModel, table=True):
                                            sa_relationship_kwargs={"lazy": "selectin",
                                                                    "cascade": "all, delete , delete-orphan"})
     dogs: List["Dog"] = Relationship(back_populates="owner", sa_relationship_kwargs={"lazy": "selectin"})
+    exams: List["Exam"] = Relationship(back_populates="member",
+                                       sa_relationship_kwargs={"lazy": "selectin",
+                                                               "cascade": "all, delete , delete-orphan"})
 
 
 class Course(SQLModel, table=True):
@@ -50,13 +53,20 @@ class Dog(SQLModel, table=True):
     owner_id: int = Field(foreign_key="members.id")
     owner: Member = Relationship(back_populates="dogs", sa_relationship_kwargs={"lazy": "selectin"})
 
+    exams: List["Exam"] = Relationship(back_populates="dog",
+                                       sa_relationship_kwargs={"lazy": "selectin",
+                                                               "cascade": "all, delete , delete-orphan"})
+
 
 class Exam(SQLModel, table=True):
     __tablename__ = "exams"
 
     id: Optional[int] = Field(primary_key=True, index=True)
     type: ExamEnum
-    member_id: Optional[int] = Field(foreign_key="members.id", default=None)
-    dog_id: Optional[int] = Field(foreign_key="dogs.id", default=None)
+    member_id: int = Field(foreign_key="members.id")
+    dog_id: int = Field(foreign_key="dogs.id")
     date_from: date
     expires: date
+
+    member: Member = Relationship(back_populates="exams", sa_relationship_kwargs={"lazy": "selectin"})
+    dog: Dog = Relationship(back_populates="exams", sa_relationship_kwargs={"lazy": "selectin"})
