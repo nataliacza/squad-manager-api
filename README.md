@@ -38,7 +38,25 @@ Web application design created in [Figma](https://www.figma.com/file/d2eQcOC1lFr
 - Docker and docker-compose
 - Poetry
 
-## Branch and commits convention
+## Run the application
+
+1. Clone repository:
+```
+git clone https://github.com/nataliacza/squad-manager-api
+```
+
+2. Create **.env** file in root folder, copy the content from **.env-example** and change example variables.
+
+3. Using docker compose run the containers:
+```
+docker-compose up
+```
+
+5. Open application in web browser:
+- Endpoints (OpenApi documentation): http://localhost:8000/docs#/
+- PgAdmin for database view: http://localhost:5050/login
+
+## Branch and commits
 
 Branch naming convention:
 - feature - adding, refactoring or removing a feature
@@ -66,21 +84,3 @@ Examples:
 - refactor: rewrite get endpoint
 - tests: add unit tests
 - chore: write function documentation
-
-## Run the application
-
-1. Clone repository:
-```
-git clone https://github.com/nataliacza/squad-manager-api
-```
-
-2. Create **.env** file in root folder, copy the content from **.env-example** and change example variables.
-
-3. Using docker compose run the containers:
-```
-docker-compose up
-```
-
-5. Open application in web browser:
-- Endpoints (OpenApi documentation): http://localhost:8000/docs#/
-- PgAdmin for database view: http://localhost:5050/login
