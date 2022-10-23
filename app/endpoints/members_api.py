@@ -1,4 +1,3 @@
-from http.client import HTTPResponse
 from typing import List
 
 from fastapi import APIRouter
@@ -77,7 +76,6 @@ async def get_member_details(member_id: int):
         return JSONResponse(status_code=404, content={"detail": "Id Not Found"})
 
 
-# TODO: check if member has any exams assigned
 @members_router.delete(path="/{member_id}",
                        summary="Delete member",
                        description="On deletion, all assigned courses will be removed. Unable to delete, \

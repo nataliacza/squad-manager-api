@@ -107,7 +107,6 @@ async def update_dog_details(dog_id: int, update_dog: SaveDogDto):
         return JSONResponse(status_code=404, content={"detail": "Dog Id Not Found"})
 
 
-# TODO: when dog is deleted, all assigned exams will be deleted - cascade
 @dogs_router.delete(path="/{dog_id}",
                     summary="Delete dog",
                     description="On deletion, all assigned exams will be removed.",

@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from app.config import settings
 from app.core.database import create_db_and_tables
 from app.endpoints.dogs_api import dogs_router
+from app.endpoints.exams_api import exams_router
 from app.endpoints.members_api import members_router
 
 
@@ -20,3 +21,4 @@ def get_application():
 app = get_application()
 app.include_router(members_router)
 app.include_router(dogs_router)
+app.include_router(exams_router)
