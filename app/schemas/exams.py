@@ -14,6 +14,9 @@ class ExamBaseDto(SQLModel):
     type: ExamEnum
     member_id: int
     dog_id: int
+
+
+class ExamDateDto(SQLModel):
     date_from: date
     expires: date
 
@@ -25,9 +28,13 @@ class ExamBaseDto(SQLModel):
         return date_from
 
 
-class SaveExamDto(ExamBaseDto):
+class SaveExamDto(ExamDateDto, ExamBaseDto):
     pass
 
 
-class ExamDetailsDto(ExamBaseDto, ExamIdDto):
+class ExamDetailsDto(ExamDateDto, ExamBaseDto, ExamIdDto):
+    pass
+
+
+class UpdateExamDateDto(ExamDateDto):
     pass

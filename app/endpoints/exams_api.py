@@ -8,7 +8,7 @@ from starlette.responses import JSONResponse
 from app.core.database import engine
 from app.helpers.check_existing_exams import check_exam
 from app.models.core_models import Member, Dog, Exam
-from app.schemas.exams import SaveExamDto, ExamDetailsDto
+from app.schemas.exams import SaveExamDto, ExamDetailsDto, UpdateExamDateDto
 
 exams_router = APIRouter(prefix="/exams",
                          tags=["Exams"])
@@ -82,3 +82,53 @@ async def get_all_exams():
     with Session(engine) as session:
         exams = session.exec(select(Exam)).all()
         return exams
+
+
+@exams_router.patch(path="/{exam_id}",
+                    response_model=ExamDetailsDto,
+                    summary="Update exam",
+                    status_code=200,
+                    responses={200: {"detail": "Successful operation"},
+                               400: {"detail": "Bad Request"},
+                               401: {"detail": "Unauthorized"},
+                               405: {"detail": "Method Not Allowed"}})
+async def update_exam_date(*, exam_id: int, update_exam: UpdateExamDateDto):
+
+    with Session(engine) as session:
+        get_exam = session.exec(select(Exam).where(Exam.id == exam_id)).first()
+
+        if get_exam:
+            try:
+                new_data = update_exam.dict(exclude_unset=True)
+                for key, value in new_data.items():
+                    setattr(get_exam, key, value)
+                session.add(get_exam)
+                session.commit()
+                session.refresh(get_exam)
+
+                return get_exam
+
+            except ValidationError as error:
+                return error
+
+        return JSONResponse(status_code=404, content={"detail": "Id Not Found"})
+
+
+@exams_router.delete(path="/{exam_id}",
+                     summary="Delete exam",
+                     status_code=204,
+                     responses={204: {"detail": "No content"},
+                                401: {"detail": "Unauthorized"},
+                                404: {"detail": "Not Found"},
+                                405: {"detail": "Method Not Allowed"}})
+async def delete_exam(exam_id: int):
+
+    with Session(engine) as session:
+        get_exam = session.get(Exam, exam_id)
+
+        if get_exam:
+            session.delete(get_exam)
+            session.commit()
+            return {}
+
+        return JSONResponse(status_code=404, content={"detail": "Id Not Found"})
