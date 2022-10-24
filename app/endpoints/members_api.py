@@ -132,37 +132,35 @@ async def update_member_details(member_id: int, update_member: UpdateMemberDetai
         return JSONResponse(status_code=404, content={"detail": "Id Not Found"})
 
 
-@members_router.put(path="/{member_id}/courses/{course_id}",
-                    response_model=CourseReadDto,
-                    summary="Update single course",
-                    status_code=200,
-                    responses={200: {"detail": "Successful operation"},
-                               401: {"detail": "Unauthorized"},
-                               404: {"detail": "Not Found"},
-                               405: {"detail": "Method Not Allowed"}})
+@members_router.patch(path="/{member_id}/courses/{course_id}",
+                      response_model=CourseReadDto,
+                      summary="Update single course",
+                      status_code=200,
+                      responses={200: {"detail": "Successful operation"},
+                                 401: {"detail": "Unauthorized"},
+                                 404: {"detail": "Not Found"},
+                                 405: {"detail": "Method Not Allowed"}})
 async def update_course_details(*, member_id: int, course_id: int, update_course: UpdateCourseDto):
 
     with Session(engine) as session:
-        get_member = session.get(Member, member_id)
+        get_course = session.exec(select(Course)
+                                  .where(Course.member_id == member_id)
+                                  .where(Course.id == course_id)).first()
 
-        if get_member:
-            get_course = session.get(Course, course_id)
-            if get_course:
-                try:
-                    new_course_data = update_course.dict()
-                    for key, value in new_course_data.items():
-                        setattr(get_course, key, value)
-                    session.add(get_course)
-                    session.commit()
-                    session.refresh(get_course)
-                    return get_course
+        if get_course:
+            try:
+                new_course_data = update_course.dict(exclude_unset=True)
+                for key, value in new_course_data.items():
+                    setattr(get_course, key, value)
+                session.add(get_course)
+                session.commit()
+                session.refresh(get_course)
+                return get_course
 
-                except ValidationError as error:
-                    return error
+            except ValidationError as error:
+                return error
 
-            return JSONResponse(status_code=404, content={"detail": "Course Id Not Found"})
-
-        return JSONResponse(status_code=404, content={"detail": "Member Id Not Found"})
+        return JSONResponse(status_code=404, content={"detail": "Course Not Found"})
 
 
 @members_router.get(path="/{member_id}/courses",
