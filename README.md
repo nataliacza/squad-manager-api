@@ -82,5 +82,5 @@ Examples:
 - feat: add new model
 - fix: update port number
 - refactor: rewrite get endpoint
-- tests: add unit tests
+- test: add unit tests
 - chore: write function documentation
