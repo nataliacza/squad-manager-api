@@ -21,7 +21,8 @@ class Member(SQLModel, table=True):
     courses: List["Course"] = Relationship(back_populates="member",
                                            sa_relationship_kwargs={"lazy": "selectin",
                                                                    "cascade": "all, delete , delete-orphan"})
-    dogs: List["Dog"] = Relationship(back_populates="owner", sa_relationship_kwargs={"lazy": "selectin"})
+    dogs: List["Dog"] = Relationship(back_populates="owner",
+                                     sa_relationship_kwargs={"lazy": "selectin"})
     exams: List["Exam"] = Relationship(back_populates="member",
                                        sa_relationship_kwargs={"lazy": "selectin",
                                                                "cascade": "all, delete , delete-orphan"})
@@ -36,7 +37,8 @@ class Course(SQLModel, table=True):
     expires: date = Field(default=None, nullable=True)
 
     member_id: int = Field(foreign_key="members.id")
-    member: Member = Relationship(back_populates="courses", sa_relationship_kwargs={"lazy": "selectin"})
+    member: Member = Relationship(back_populates="courses",
+                                  sa_relationship_kwargs={"lazy": "selectin"})
 
 
 class Dog(SQLModel, table=True):
@@ -51,7 +53,8 @@ class Dog(SQLModel, table=True):
     chip: Optional[str] = None
 
     owner_id: int = Field(foreign_key="members.id")
-    owner: Member = Relationship(back_populates="dogs", sa_relationship_kwargs={"lazy": "selectin"})
+    owner: Member = Relationship(back_populates="dogs",
+                                 sa_relationship_kwargs={"lazy": "selectin"})
 
     exams: List["Exam"] = Relationship(back_populates="dog",
                                        sa_relationship_kwargs={"lazy": "selectin",
@@ -68,5 +71,7 @@ class Exam(SQLModel, table=True):
     date_from: date
     expires: date
 
-    member: Member = Relationship(back_populates="exams", sa_relationship_kwargs={"lazy": "selectin"})
-    dog: Dog = Relationship(back_populates="exams", sa_relationship_kwargs={"lazy": "selectin"})
+    member: Member = Relationship(back_populates="exams",
+                                  sa_relationship_kwargs={"lazy": "selectin"})
+    dog: Dog = Relationship(back_populates="exams",
+                            sa_relationship_kwargs={"lazy": "selectin"})
