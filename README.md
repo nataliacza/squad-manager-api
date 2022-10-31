@@ -1,37 +1,51 @@
 # Squad Manager API
 
-Since 2015 I'm member of OSP Gdansk 🚒 (Ochotnicza Straz Pozarna / Volunteer Fire Department). Our specialization is search for missing persons using trained and certified dogs 🐕‍🦺 . Each formalized group struggles with the same issues - a lot of members, numerous deadlines, plenty of data that you need to store somewhere, not to mention how to manage all those things together.
+Since 2015 I'm member of <b>OSP Gdansk</b> 🚒 (Ochotnicza Straz Pozarna / Volunteer Fire Department). Our 
+specialization is search for missing persons using trained and <b>certified dogs</b> 🐕‍🦺. Each similar formalized 
+group struggles with the same issues - a lot of members, numerous deadlines, plenty of simple data that you need 
+to store and remember about.
 
-Why not to create some tool, which could manage everything in one place?
+Why not create an application, which could manage everything in one place?
 
-Main goal of this project is to create all-in-one tool, that would help to manage small organizations.
+Main goal of this project is to create backend REST API for all-in-one tool, that would help to manage small organizations like OSP.
 
 ## Description
-Application would be available only for registered users, which are involved in team management (chief or manager).
+Application would be available only for limited users, which are involved in team management (chief or manager).
 
-Basic features:
-- Member list with basic details.
-- Member details - detailed information of the member, owned dogs, about courses taken.
-- Dog list with details.
-- Exam list with details - who, what, when.
-- CRUD for all above.
+<b>Basic functionalities:</b>
+- User can view a list of all members with their basic information.
+- User can add new member.
+- User can view member details (contact, dogs, courses)
+- User can edit contact details, dogs assigned (or assign new dog), courses details.
+- User can delete member.
+- User can view a list of all dogs with details.
+- User can add new dog.
+- User can edit dog details.
+- User can delete dog.
+- User can view a list of all exams.
+- User can add new member and dog exam.
+- User can edit exam dates.
+- User can delete exam.
 
-Next steps:
-- Add search and filter for exam list.
-- Add pagination for all list views.
+All data storage in SQL database.
+
+
+<b>Next steps:</b>
 - Add authorization and authentication.
-- Deploy.
+- Add pagination for all list views.
+- Add search and filter for exam list.
+- Deploy (for frontend development).
 
-Future plan:
+<b>Possibilities to extend:</b>
 - Add personal inventory for each member.
-- Add equipment list with details.
-- Event and notification dashboard (main page).
+- Add group equipment list with details.
+- Event and notification dashboard.
 - List of actions group participated in - when, where, who.
-- Training planner.
+- Personal training plan/diary.
 
-Web application design created in [Figma](https://www.figma.com/file/d2eQcOC1lFrzm9YcfCJkHZ/OSP---Web-design).
+Web application schema design in [Figma](https://www.figma.com/file/d2eQcOC1lFrzm9YcfCJkHZ/OSP---Web-design).
 
-## Tech
+## Tech tools
 - Python 3
 - FastAPI
 - PostgreSQL / SQLAlchemy / SQLModel
@@ -58,29 +72,69 @@ docker-compose up
 
 ## Branch and commits
 
-Branch naming convention:
-- feature - adding, refactoring or removing a feature
-- bugfix - fixing a bug
-- hotfix - changing code with a temporary solution and/or without following the usual process (high importance)
+<b>Branch naming convention:</b>
+- <b>feature</b> - adding, refactoring or removing a feature
+- <b>bugfix</b> - fixing a bug
+- <b>hotfix</b> - changing code with a temporary solution and/or without following the usual process (high importance)
 
-Examples:
+<details>
+<summary markdown="span"><b>Examples</b></summary>
+<i>
+
 - feature/database-connection
-- bugfix/status-codes
+- bugfix/docker-compose-ports
 - hotfix/user-model
 
-Commit messages:
-- build - changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
-- feat - adding a new feature
-- fix - fixing a bug
-- refactor - changing code for performance or convenience purpose
-- test - test-related code
-- chore - everything else (formatting, cleaning useless code etc.)
-- docs - creating or updating documents
-- ci - changes to  CI configuration files and scripts
+</i>
+</details>
+<br>
 
-Examples:
+<b>Commit messages:</b>
+- <b>build</b> - changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
+- <b>feat</b> - adding a new feature
+- <b>fix</b> - fixing a bug
+- <b>refactor</b> - changing code for performance or convenience purpose
+- <b>test</b> - test-related code
+- <b>chore</b> - everything else (formatting, cleaning useless code etc.)
+- <b>docs</b> - creating or updating documents
+- <b>ci</b> - changes to  CI configuration files and scripts
+
+<details>
+<summary markdown="span"><b>Examples</b></summary>
+<i>
+
 - feat: add new model
 - fix: update port number
 - refactor: rewrite get endpoint
-- test: add unit tests
-- chore: write function documentation
+- test: add 5 unit tests
+- chore: write README documentation
+
+</i>
+</details>
+
+### Git Hooks
+In order to properly work with this repository, please copy prepared hooks located in <i>git_hooks</i> folder:
+- commit-msg
+- pre-commit
+- prepare-commit-msg
+
+<br>
+You have few options to copy files from repository:
+
+1. Use symlink
+
+Open Command Line as admin and use command pattern: mklink (full path TO destination file) (full path FROM target 
+file). See below:
+```
+mklink (path)\(repository-name)\.git\hooks\commit-msg (path)\(repository-name)\hooks\commit-msg.py
+mklink (path)\(repository-name)\.git\hooks\pre-commit (path)\(repository-name)\hooks\pre-commit.py
+mklink (path)\(repository-name)\.git\hooks\prepare-commit-msg (path)\(repository-name)\hooks\prepare-commit-msg.py
+```
+Example:
+```
+mklink D:\MyFolder\my-name\.git\hooks\commit-msg D:\MyFolder\my-name\git_hooks\commit-msg.py
+```
+
+2. Copy - paste
+
+Just copy and paste all files from folder <i> .\git_hooks\ </i> to <i> .\my-repository\.git\hooks\ </i>.
