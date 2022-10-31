@@ -1,6 +1,6 @@
-from app.core.database import engine
 from sqlmodel import Session
 
+from app.core.database import engine
 from app.models.enums import CourseEnum
 from app.models.core_models import Course
 

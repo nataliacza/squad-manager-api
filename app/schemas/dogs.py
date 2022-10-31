@@ -44,7 +44,3 @@ class SaveDogDto(DogOwnerDto, DogDetailsDto, DogNameDto):
 
 class DogDetailsReadDto(DogOwnerDto, DogDetailsDto, DogNameDto, DogIdDto):
     pass
-
-
-
-
