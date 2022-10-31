@@ -4,7 +4,7 @@ import sys
 import re
 
 
-commit_regex = r"^(build|feat|fix|refactor|test|chore|docs|ci){1}(:) ([\w\W\s\S]+)$"
+__COMMIT_REGEX = r"^(build|feat|fix|refactor|test|chore|docs|ci){1}(:) ([\w\W\s\S]+)$"
 
 
 def get_commit_message() -> str:
@@ -15,11 +15,11 @@ def get_commit_message() -> str:
 
 
 def commit_msg_hook():
-    if re.search(commit_regex, get_commit_message()):
+    if re.search(__COMMIT_REGEX, get_commit_message()):
         print("[INFO] Good commit message!")
         sys.exit(0)
     else:
-        print(f"[ERROR] Bad commit message! Follow regex: {commit_regex}")
+        print(f"[ERROR] Bad commit message! Follow regex: {__COMMIT_REGEX}")
         sys.exit(1)
 
 
