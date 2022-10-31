@@ -5,7 +5,7 @@ import re
 import subprocess
 
 
-branch_regex = r"^(build|feat|fix|refactor|test|chore|docs|ci){1}(:) ([\w ])+([\s\S])"
+branch_regex = r"^(feature|bugfix|hotfix){1}(\/)([a-z0-9-]+)$"
 
 
 def get_current_branch() -> str:
@@ -15,13 +15,18 @@ def get_current_branch() -> str:
 
 def pre_commit_hook():
     if re.search(branch_regex, get_current_branch()):
-        print("\n[INFO] Branch name validated!\n")
+        print("[INFO] Branch name validated!")
         sys.exit(0)
     else:
-        print(f"\n[ERROR] Invalid branch name. Follow regex: {branch_regex}.\n")
+        print(f"[ERROR] Invalid branch name. Follow regex: {branch_regex}.")
+        print("Example branch name:")
+        print("     feature/database-connection")
+        print("     bugfix/docker-compose-port")
+        print("     hotfix/user-model")
         sys.exit(1)
 
 
 if __name__ == "__main__":
     print("\n----------PRE-COMMIT----------")
     pre_commit_hook()
+    print("------------------------------\n")
