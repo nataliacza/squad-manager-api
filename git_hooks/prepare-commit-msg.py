@@ -3,7 +3,7 @@
 import sys
 
 
-commit_regex = r"^(build|feat|fix|refactor|test|chore|docs|ci){1}(:) ([\w\W\s\S]+)$"
+__COMMIT_REGEX = r"^(build|feat|fix|refactor|test|chore|docs|ci){1}(:) ([\w\W\s\S]+)$"
 
 
 def prepare_commit_msg():
@@ -13,7 +13,7 @@ def prepare_commit_msg():
     print("     refactor: rewrite get endpoint")
     print("     test: add 5 unit tests")
     print("     chore: write README documentation")
-    print(f"Follow regex: {commit_regex}.")
+    print(f"Follow regex: {__COMMIT_REGEX}.")
     sys.exit(0)
 
 
