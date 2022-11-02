@@ -1,17 +1,22 @@
+from typing import Generator
+
 import databases
-from sqlmodel import create_engine
+from sqlmodel import create_engine, Session
 
 from app.core.config import settings
 
-SQLALCHEMY_DATABASE_URL = settings.DATABASE_URL
-engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True)
+POSTGRES_DB = settings.DATABASE_URL
+engine = create_engine(POSTGRES_DB, echo=True)
 
-# TODO: create session generator
+
+def get_session() -> Generator:
+    with Session(engine) as session:
+        yield session
 
 
 async def check_db_connected():
     try:
-        database = databases.Database(SQLALCHEMY_DATABASE_URL)
+        database = databases.Database(POSTGRES_DB)
         if not database.is_connected:
             await database.connect()
             await database.execute("SELECT 1")
@@ -23,7 +28,7 @@ async def check_db_connected():
 
 async def check_db_disconnected():
     try:
-        database = databases.Database(SQLALCHEMY_DATABASE_URL)
+        database = databases.Database(POSTGRES_DB)
         if database.is_connected:
             await database.disconnect()
         print("Database is disconnected")
