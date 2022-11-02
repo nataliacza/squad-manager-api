@@ -1,8 +1,8 @@
 from sqlmodel import Session, select
 
-from app.core.database import engine
-from app.models.core_models import Exam
-from app.models.enums import ExamEnum
+from app.db.dev_engine import engine
+from app.db.models.core_models import Exam
+from app.db.models.enums import ExamEnum
 
 
 async def check_exam(member: int, dog: int, exam: ExamEnum) -> bool:

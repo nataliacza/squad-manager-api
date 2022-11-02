@@ -5,24 +5,22 @@ from pydantic import ValidationError
 from sqlmodel import Session, select
 from starlette.responses import JSONResponse
 
-from app.core.database import engine
+from app.db.dev_engine import engine
+from app.db.models.core_models import (Member, Dog, Exam)
 from app.helpers.check_existing_exams import check_exam
-from app.models.core_models import Member, Dog, Exam
-from app.schemas.exams import SaveExamDto, ExamDetailsDto, UpdateExamDateDto
+from app.schemas.exams import (ExamDetailsDto, SaveExamDto, UpdateExamDateDto)
 
-exams_router = APIRouter(prefix="/exams",
-                         tags=["Exams"])
+router = APIRouter()
 
-
-@exams_router.post(path="/",
-                   response_model=ExamDetailsDto,
-                   summary="Add new exam",
-                   status_code=201,
-                   responses={201: {"detail": "Created"},
-                              401: {"detail": "Unauthorized"},
-                              400: {"detail": "Bad Request"},
-                              404: {"detail": "Not Found"},
-                              405: {"detail": "Method Not Allowed"}})
+@router.post(path="/",
+             response_model=ExamDetailsDto,
+             summary="Add new exam",
+             status_code=201,
+             responses={201: {"detail": "Created"},
+                        401: {"detail": "Unauthorized"},
+                        400: {"detail": "Bad Request"},
+                        404: {"detail": "Not Found"},
+                        405: {"detail": "Method Not Allowed"}})
 async def add_exam(exam_details: SaveExamDto):
 
     with Session(engine) as session:
@@ -51,14 +49,14 @@ async def add_exam(exam_details: SaveExamDto):
             return error
 
 
-@exams_router.get(path="/{exam_id}",
-                  response_model=ExamDetailsDto,
-                  summary="Get exam by id",
-                  status_code=200,
-                  responses={200: {"detail": "Successful operation"},
-                             401: {"detail": "Unauthorized"},
-                             404: {"detail": "Not Found"},
-                             405: {"detail": "Method Not Allowed"}})
+@router.get(path="/{exam_id}",
+            response_model=ExamDetailsDto,
+            summary="Get exam by id",
+            status_code=200,
+            responses={200: {"detail": "Successful operation"},
+                       401: {"detail": "Unauthorized"},
+                       404: {"detail": "Not Found"},
+                       405: {"detail": "Method Not Allowed"}})
 async def get_exam_by_id(exam_id: int):
 
     with Session(engine) as session:
@@ -70,13 +68,13 @@ async def get_exam_by_id(exam_id: int):
         return JSONResponse(status_code=404, content={"detail": "Id Not Found"})
 
 
-@exams_router.get(path="/",
-                  response_model=List[ExamDetailsDto],
-                  summary="Get all exams",
-                  status_code=200,
-                  responses={200: {"detail": "Successful operation"},
-                             401: {"detail": "Unauthorized"},
-                             405: {"detail": "Method Not Allowed"}})
+@router.get(path="/",
+            response_model=List[ExamDetailsDto],
+            summary="Get all exams",
+            status_code=200,
+            responses={200: {"detail": "Successful operation"},
+                       401: {"detail": "Unauthorized"},
+                       405: {"detail": "Method Not Allowed"}})
 async def get_all_exams():
 
     with Session(engine) as session:
@@ -84,14 +82,14 @@ async def get_all_exams():
         return exams
 
 
-@exams_router.patch(path="/{exam_id}",
-                    response_model=ExamDetailsDto,
-                    summary="Update exam",
-                    status_code=200,
-                    responses={200: {"detail": "Successful operation"},
-                               400: {"detail": "Bad Request"},
-                               401: {"detail": "Unauthorized"},
-                               405: {"detail": "Method Not Allowed"}})
+@router.patch(path="/{exam_id}",
+              response_model=ExamDetailsDto,
+              summary="Update exam",
+              status_code=200,
+              responses={200: {"detail": "Successful operation"},
+                         400: {"detail": "Bad Request"},
+                         401: {"detail": "Unauthorized"},
+                         405: {"detail": "Method Not Allowed"}})
 async def update_exam_date(*, exam_id: int, update_exam: UpdateExamDateDto):
 
     with Session(engine) as session:
@@ -114,13 +112,13 @@ async def update_exam_date(*, exam_id: int, update_exam: UpdateExamDateDto):
         return JSONResponse(status_code=404, content={"detail": "Id Not Found"})
 
 
-@exams_router.delete(path="/{exam_id}",
-                     summary="Delete exam",
-                     status_code=204,
-                     responses={204: {"detail": "No content"},
-                                401: {"detail": "Unauthorized"},
-                                404: {"detail": "Not Found"},
-                                405: {"detail": "Method Not Allowed"}})
+@router.delete(path="/{exam_id}",
+               summary="Delete exam",
+               status_code=204,
+               responses={204: {"detail": "No content"},
+                          401: {"detail": "Unauthorized"},
+                          404: {"detail": "Not Found"},
+                          405: {"detail": "Method Not Allowed"}})
 async def delete_exam(exam_id: int):
 
     with Session(engine) as session:

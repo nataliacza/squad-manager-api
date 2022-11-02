@@ -3,7 +3,7 @@ from datetime import date
 from pydantic import validator
 from sqlmodel import SQLModel
 
-from app.models.enums import ExamEnum
+from app.db.models.enums import ExamEnum
 
 
 class ExamIdDto(SQLModel):

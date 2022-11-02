@@ -1,24 +1,38 @@
 from fastapi import FastAPI
+from sqlmodel import SQLModel
 
-from app.config import settings
-from app.core.database import create_db_and_tables
-from app.endpoints.dogs_api import dogs_router
-from app.endpoints.exams_api import exams_router
-from app.endpoints.members_api import members_router
+from app.api.base import api_router
+from app.core.config import settings
+from app.db.dev_engine import engine, check_db_connected, check_db_disconnected
 
 
-def get_application():
+def include_router(application):
+    application.include_router(api_router)
+
+
+def create_db_and_tables():
+    SQLModel.metadata.create_all(engine)
+
+
+def start_application():
     _app = FastAPI(title=settings.PROJECT_NAME,
                    version=settings.PROJECT_VERSION,
                    description=settings.PROJECT_DESCRIPTION,
                    openapi_tags=settings.API_TAGS)
 
+    include_router(_app)
     create_db_and_tables()
-
     return _app
 
 
-app = get_application()
-app.include_router(members_router)
-app.include_router(dogs_router)
-app.include_router(exams_router)
+app = start_application()
+
+
+@app.on_event("startup")
+async def app_startup():
+    await check_db_connected()
+
+
+@app.on_event("shutdown")
+async def app_shutdown():
+    await check_db_disconnected()
