@@ -3,7 +3,7 @@ from typing import Generator
 import databases
 from sqlmodel import create_engine, Session
 
-from app.core.config import settings
+from app.config import settings
 
 POSTGRES_DB = settings.DATABASE_URL
 engine = create_engine(POSTGRES_DB, echo=True)

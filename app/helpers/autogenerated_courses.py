@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from sqlmodel import Session
 
 from app.db.dev_engine import engine
@@ -5,7 +7,7 @@ from app.db.models.core_models import Course
 from app.db.models.enums import CourseEnum
 
 
-def generate_courses(member_id: int):
+def generate_courses(member_id: UUID) -> None:
 
     courses_list = [Course(member_id=member_id, course_name=CourseEnum.Kpp),
                     Course(member_id=member_id, course_name=CourseEnum.Badania),

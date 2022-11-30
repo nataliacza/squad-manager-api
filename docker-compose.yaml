@@ -18,6 +18,22 @@ services:
     networks:
       - backend_network
 
+#  app_test:
+#    container_name: test_api
+#    image: test_api
+#    command: "pytest --cov=./app/."
+#    build:
+#      context: .
+#      dockerfile: Dockerfile-tests
+#    env_file:
+#      - .env
+#    ports:
+#      - "8001:8000"
+#    depends_on:
+#      - database
+#    networks:
+#      - backend_network
+
   database:
     container_name: postgres_ctr
     image: postgres:12

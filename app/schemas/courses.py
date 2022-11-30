@@ -1,5 +1,6 @@
 from datetime import date
 from typing import Optional
+from uuid import UUID
 
 from pydantic import validator
 from sqlmodel import SQLModel
@@ -8,7 +9,7 @@ from app.db.models.enums import CourseEnum
 
 
 class CourseIdDto(SQLModel):
-    id: int
+    id: UUID
 
 
 class CourseNameDto(SQLModel):
