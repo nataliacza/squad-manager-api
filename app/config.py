@@ -1,14 +1,12 @@
 import os
-from pathlib import Path
 from typing import List
 
 from dotenv import load_dotenv
 from pydantic import BaseSettings
 
-from app.core import api_description
+from app.api import api_description
 
-env_path = Path('.') / '.env'
-load_dotenv(dotenv_path=env_path)
+load_dotenv()
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = api_description.PROJECT_NAME
@@ -31,7 +29,7 @@ class Settings(BaseSettings):
 
     class Config:
         case_sensitive = True
-        env_file = "/.env"
+        env_file = ".env"
         env_file_encoding = "utf-8"
 
 settings = Settings()

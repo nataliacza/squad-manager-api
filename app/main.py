@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from sqlmodel import SQLModel
 
-from app.api.base import api_router
-from app.core.config import settings
+from app.api.routers import api_router
+from app.config import settings
 from app.db.dev_engine import engine, check_db_connected, check_db_disconnected
 
 
