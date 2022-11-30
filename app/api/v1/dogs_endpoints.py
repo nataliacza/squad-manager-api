@@ -1,4 +1,5 @@
 from typing import List
+from uuid import UUID
 
 from fastapi import APIRouter, Depends
 from pydantic import ValidationError
@@ -6,19 +7,19 @@ from sqlmodel import Session, select
 from starlette.responses import JSONResponse
 
 from app.db.dev_engine import get_session
-from app.db.models.core_models import (Member, Dog)
+from app.db.models.core_models import Member, Dog
 from app.schemas.dogs import (DogDetailsReadDto, SaveDogDto)
 
-router = APIRouter()
+dog_router = APIRouter()
 
-@router.post(path="/",
-             response_model=DogDetailsReadDto,
-             summary="Add new dog",
-             status_code=201,
-             responses={201: {"description": "Created"},
-                        401: {"description": "Unauthorized"},
-                        404: {"description": "Not Found"},
-                        405: {"description": "Method Not Allowed"}})
+@dog_router.post(path="/",
+                 response_model=DogDetailsReadDto,
+                 summary="Add new dog",
+                 status_code=201,
+                 responses={201: {"description": "Created"},
+                            401: {"description": "Unauthorized"},
+                            404: {"description": "Not Found"},
+                            405: {"description": "Method Not Allowed"}})
 async def add_dog(*, dog_details: SaveDogDto, session: Session = Depends(get_session)):
 
     get_owner = session.get(Member, dog_details.owner_id)
@@ -37,28 +38,28 @@ async def add_dog(*, dog_details: SaveDogDto, session: Session = Depends(get_ses
     return JSONResponse(status_code=404, content={"description": "Owner Id Not Found"})
 
 
-@router.get(path="/",
-            response_model=List[DogDetailsReadDto],
-            summary="Get all dogs",
-            status_code=200,
-            responses={200: {"description": "Successful operation"},
-                       401: {"description": "Unauthorized"},
-                       405: {"description": "Method Not Allowed"}})
+@dog_router.get(path="/",
+                response_model=List[DogDetailsReadDto],
+                summary="Get all dogs",
+                status_code=200,
+                responses={200: {"description": "Successful operation"},
+                           401: {"description": "Unauthorized"},
+                           405: {"description": "Method Not Allowed"}})
 async def get_all_dogs(session: Session = Depends(get_session)):
 
     dogs = session.exec(select(Dog)).all()
     return dogs
 
 
-@router.get(path="/{dog_id}",
-            response_model=DogDetailsReadDto,
-            summary="Get dog by id",
-            status_code=200,
-            responses={200: {"description": "Successful operation"},
-                       401: {"description": "Unauthorized"},
-                       404: {"description": "Not Found"},
-                       405: {"description": "Method Not Allowed"}})
-async def get_dog_by_id(dog_id: int, session: Session = Depends(get_session)):
+@dog_router.get(path="/{dog_id}",
+                response_model=DogDetailsReadDto,
+                summary="Get dog by id",
+                status_code=200,
+                responses={200: {"description": "Successful operation"},
+                           401: {"description": "Unauthorized"},
+                           404: {"description": "Not Found"},
+                           405: {"description": "Method Not Allowed"}})
+async def get_dog_by_id(dog_id: UUID, session: Session = Depends(get_session)):
 
     get_dog = session.get(Dog, dog_id)
 
@@ -68,15 +69,15 @@ async def get_dog_by_id(dog_id: int, session: Session = Depends(get_session)):
     return JSONResponse(status_code=404, content={"description": "Id Not Found"})
 
 
-@router.put(path="/{dog_id}",
-            response_model=DogDetailsReadDto,
-            summary="Update dog details",
-            status_code=200,
-            responses={200: {"description": "Successful operation"},
-                       401: {"description": "Unauthorized"},
-                       404: {"description": "Not Found"},
-                       405: {"description": "Method Not Allowed"}})
-async def update_dog_details(*, dog_id: int, update_dog: SaveDogDto,
+@dog_router.put(path="/{dog_id}",
+                response_model=DogDetailsReadDto,
+                summary="Update dog details",
+                status_code=200,
+                responses={200: {"description": "Successful operation"},
+                           401: {"description": "Unauthorized"},
+                           404: {"description": "Not Found"},
+                           405: {"description": "Method Not Allowed"}})
+async def update_dog_details(*, dog_id: UUID, update_dog: SaveDogDto,
                              session: Session = Depends(get_session)):
 
     get_dog = session.get(Dog, dog_id)
@@ -102,15 +103,15 @@ async def update_dog_details(*, dog_id: int, update_dog: SaveDogDto,
     return JSONResponse(status_code=404, content={"description": "Dog Id Not Found"})
 
 
-@router.delete(path="/{dog_id}",
-               summary="Delete dog",
-               description="On deletion, all assigned exams will be removed.",
-               status_code=204,
-               responses={204: {"description": "No content"},
-                          401: {"description": "Unauthorized"},
-                          404: {"description": "Not Found"},
-                          405: {"description": "Method Not Allowed"}})
-async def delete_dog(*, dog_id: int, session: Session = Depends(get_session)):
+@dog_router.delete(path="/{dog_id}",
+                   summary="Delete dog",
+                   description="On deletion, all assigned exams will be removed.",
+                   status_code=204,
+                   responses={204: {"description": "No content"},
+                              401: {"description": "Unauthorized"},
+                              404: {"description": "Not Found"},
+                              405: {"description": "Method Not Allowed"}})
+async def delete_dog(*, dog_id: UUID, session: Session = Depends(get_session)):
 
     get_dog = session.get(Dog, dog_id)
 

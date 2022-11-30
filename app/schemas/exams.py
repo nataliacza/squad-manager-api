@@ -1,4 +1,5 @@
 from datetime import date
+from uuid import UUID
 
 from pydantic import validator
 from sqlmodel import SQLModel
@@ -7,13 +8,13 @@ from app.db.models.enums import ExamEnum
 
 
 class ExamIdDto(SQLModel):
-    id: int
+    id: UUID
 
 
 class ExamBaseDto(SQLModel):
     type: ExamEnum
-    member_id: int
-    dog_id: int
+    member_id: UUID
+    dog_id: UUID
 
 
 class ExamDateDto(SQLModel):
