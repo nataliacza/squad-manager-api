@@ -4,7 +4,7 @@ from typing import Optional, List
 from pydantic import EmailStr
 from sqlmodel import SQLModel, Field, Relationship
 
-from app.models.enums import FunctionEnum, InstitutionEnum, CourseEnum, GenderEnum, ExamEnum
+from app.db.models.enums import FunctionEnum, InstitutionEnum, CourseEnum, GenderEnum, ExamEnum
 
 
 class Member(SQLModel, table=True):

@@ -3,7 +3,7 @@ from typing import Optional, List
 from pydantic import EmailStr
 from sqlmodel import SQLModel
 
-from app.models.enums import FunctionEnum, InstitutionEnum
+from app.db.models.enums import FunctionEnum, InstitutionEnum
 from app.schemas.courses import CourseReadDto
 from app.schemas.dogs import DogIdWithName
 

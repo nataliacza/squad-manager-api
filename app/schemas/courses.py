@@ -4,7 +4,7 @@ from typing import Optional
 from pydantic import validator
 from sqlmodel import SQLModel
 
-from app.models.enums import CourseEnum
+from app.db.models.enums import CourseEnum
 
 
 class CourseIdDto(SQLModel):

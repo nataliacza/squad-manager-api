@@ -1,8 +1,8 @@
 from sqlmodel import Session
 
-from app.core.database import engine
-from app.models.enums import CourseEnum
-from app.models.core_models import Course
+from app.db.dev_engine import engine
+from app.db.models.core_models import Course
+from app.db.models.enums import CourseEnum
 
 
 def generate_courses(member_id: int):
