@@ -39,7 +39,8 @@ class DogDetailsDto(SQLModel):
 
     @validator("breed", "breeder")
     def transform(cls, v: str):
-        return v.title()
+        if v is not None:
+            return v.title()
 
     class Config:
         anystr_strip_whitespace = True
