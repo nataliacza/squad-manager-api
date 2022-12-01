@@ -1,3 +1,4 @@
+from datetime import date
 from typing import Optional, List
 from uuid import UUID
 
@@ -6,23 +7,29 @@ from sqlmodel import SQLModel
 
 from app.db.models.enums import FunctionEnum, InstitutionEnum
 from app.schemas.courses import CourseReadDto
-from app.schemas.dogs import DogIdWithName
+from app.schemas.dogs import DogIdWithNameDto
 
 
-class MemberIdDto(SQLModel):
+class MemberId(SQLModel):
     id: UUID
 
 
-class MemberBaseDto(SQLModel):
-    first_name: str = Field(min_length=2, max_length=40)
-    last_name: str = Field(min_length=2, max_length=40)
-    mobile: str = Field(min_length=9, max_length=11)
-    email: EmailStr
+class MemberName(SQLModel):
+    first_name: str
+    last_name: str
 
     @validator("first_name", "last_name")
     def transform(cls, v: str):
         if v is not None:
             return v.title()
+
+    class Config:
+        anystr_strip_whitespace = True
+
+
+class MemberContact(SQLModel):
+    mobile: str = Field(min_length=9, max_length=11)
+    email: EmailStr
 
     @validator("mobile")
     def is_digit(cls, v: str):
@@ -33,43 +40,38 @@ class MemberBaseDto(SQLModel):
         anystr_strip_whitespace = True
 
 
-class MemberDetailsDto(SQLModel):
+class MemberDetails(SQLModel):
     function: Optional[FunctionEnum] = None
     institution: Optional[InstitutionEnum] = None
 
 
-class MemberDogsDto(SQLModel):
-    dogs: Optional[List[DogIdWithName]] = None
+class MemberDogs(SQLModel):
+    dogs: Optional[List[DogIdWithNameDto]] = None
 
 
-class MemberCoursesDto(SQLModel):
+class MemberCourses(SQLModel):
     courses: List[CourseReadDto]
 
 
-class MemberListViewDto(MemberCoursesDto, MemberBaseDto, MemberIdDto):
+class MemberListViewDto(MemberCourses, MemberContact, MemberName, MemberId):
     pass
 
 
-class MemberDetailsReadDto(MemberCoursesDto, MemberDogsDto, MemberDetailsDto, MemberBaseDto, MemberIdDto):
+class MemberDetailsReadDto(MemberCourses, MemberDogs, MemberDetails, MemberContact, MemberName, MemberId):
     pass
 
 
-class CreateMemberDto(MemberBaseDto):
+class CreateMemberDto(MemberContact, MemberName):
     pass
 
 
-class MemberResponseDto(MemberDetailsDto, MemberBaseDto, MemberIdDto):
+class MemberResponseDto(MemberDetails, MemberContact, MemberName, MemberId):
     pass
 
 
-class UpdateMemberDetailsDto(MemberDetailsDto, MemberBaseDto):
+class UpdateMemberDetailsDto(MemberDetails, MemberContact, MemberName):
     pass
 
 
-class MemberListDto(MemberBaseDto, MemberIdDto):
+class MemberNameIdDto(MemberName, MemberId):
     pass
-
-
-class MemberNameDto(MemberIdDto):
-    first_name: str
-    last_name: str

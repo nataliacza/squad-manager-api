@@ -7,23 +7,31 @@ from sqlmodel import SQLModel
 
 from app.db.models.enums import GenderEnum
 
+# TODO: figure out how to resolve issue with
+#  ImportError: cannot import name 'MemberNameIdDto' from partially initialized module 'app.schemas.members'
+class MemberInfo(SQLModel):
+    id: UUID
+    first_name: str
+    last_name: str
 
-class DogIdDto(SQLModel):
+
+class DogId(SQLModel):
     id: UUID
 
 
-class DogNameDto(SQLModel):
+class DogName(SQLModel):
     name: str = Field(min_length=2, max_length=30)
 
     @validator("name")
     def transform(cls, v: str):
-        return v.title()
+        if v is not None:
+            return v.title()
 
     class Config:
         anystr_strip_whitespace = True
 
 
-class DogDetailsDto(SQLModel):
+class DogDetails(SQLModel):
     breed: Optional[str] = Field(default=None, min_length=2, max_length=40)
     breeder: Optional[str] = Field(default=None, min_length=2, max_length=40)
     gender: Optional[GenderEnum] = None
@@ -46,17 +54,13 @@ class DogDetailsDto(SQLModel):
         anystr_strip_whitespace = True
 
 
-class DogOwnerDto(SQLModel):
+class DogIdWithNameDto(DogName, DogId):
+    pass
+
+
+class SaveDogDto(DogDetails, DogName):
     owner_id: UUID
 
 
-class DogIdWithName(DogNameDto, DogIdDto):
-    pass
-
-
-class SaveDogDto(DogOwnerDto, DogDetailsDto, DogNameDto):
-    pass
-
-
-class DogDetailsReadDto(DogOwnerDto, DogDetailsDto, DogNameDto, DogIdDto):
-    pass
+class DogDetailsReadDto(DogDetails, DogName, DogId):
+    owner: MemberInfo
