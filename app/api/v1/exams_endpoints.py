@@ -8,8 +8,11 @@ from starlette.responses import JSONResponse
 
 from app.db.dev_engine import get_session
 from app.db.models.core_models import Member, Exam, Dog
+from app.db.models.enums import ExamEnum
 from app.helpers.check_existing_exams import check_exam
+from app.helpers.filter_exams import filter_query
 from app.schemas.exams import (ExamDetailsDto, SaveExamDto, UpdateExamDateDto)
+
 
 exam_router = APIRouter()
 
@@ -69,12 +72,17 @@ async def get_exam_by_id(exam_id: UUID, session: Session = Depends(get_session))
 @exam_router.get(path="/",
                  response_model=List[ExamDetailsDto],
                  summary="Get all exams",
+                 description="Returns list of all exams. Possible to search by dog name,\
+                 member name and exam type simultaneously.",
                  status_code=200,
                  responses={200: {"description": "Successful operation"},
                             401: {"description": "Unauthorized"},
                             405: {"description": "Method Not Allowed"}})
-async def get_all_exams(session: Session = Depends(get_session)):
-    exams = session.exec(select(Exam)).all()
+async def get_all_exams(*, dog_name: str = None, member_name: str = None, exam_type: ExamEnum = None,
+                        session: Session = Depends(get_session)):
+
+    query = filter_query(dog_name, member_name, exam_type)
+    exams = session.exec(query).all()
     return exams
 
 

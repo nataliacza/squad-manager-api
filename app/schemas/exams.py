@@ -5,6 +5,8 @@ from pydantic import validator
 from sqlmodel import SQLModel
 
 from app.db.models.enums import ExamEnum
+from app.schemas.dogs import DogIdWithName
+from app.schemas.members import MemberNameDto
 
 
 class ExamIdDto(SQLModel):
@@ -13,8 +15,8 @@ class ExamIdDto(SQLModel):
 
 class ExamBaseDto(SQLModel):
     type: ExamEnum
-    member_id: UUID
-    dog_id: UUID
+    member: MemberNameDto
+    dog: DogIdWithName
 
 
 class ExamDateDto(SQLModel):
@@ -29,8 +31,10 @@ class ExamDateDto(SQLModel):
         return date_from
 
 
-class SaveExamDto(ExamDateDto, ExamBaseDto):
-    pass
+class SaveExamDto(ExamDateDto):
+    type: ExamEnum
+    member_id: UUID
+    dog_id: UUID
 
 
 class ExamDetailsDto(ExamDateDto, ExamBaseDto, ExamIdDto):
