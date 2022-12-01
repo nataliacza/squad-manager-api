@@ -21,7 +21,8 @@ class MemberBaseDto(SQLModel):
 
     @validator("first_name", "last_name")
     def transform(cls, v: str):
-        return v.title()
+        if v is not None:
+            return v.title()
 
     @validator("mobile")
     def is_digit(cls, v: str):
@@ -67,3 +68,8 @@ class UpdateMemberDetailsDto(MemberDetailsDto, MemberBaseDto):
 
 class MemberListDto(MemberBaseDto, MemberIdDto):
     pass
+
+
+class MemberNameDto(MemberIdDto):
+    first_name: str
+    last_name: str
