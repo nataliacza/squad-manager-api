@@ -26,14 +26,13 @@ Application would be available only for limited users, which are involved in tea
 - User can add new member and dog exam.
 - User can edit exam dates.
 - User can delete exam.
+- User can filter exams - by dog name, member name/surname and exam type.
 
 All data storage in SQL database.
-
 
 <b>Next steps:</b>
 - Add authorization and authentication.
 - Add pagination for all list views.
-- Add search and filter for exam list.
 - Deploy (for frontend development).
 
 <b>Possibilities to extend:</b>
